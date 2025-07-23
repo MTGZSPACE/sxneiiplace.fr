@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MTGZSPACE - Monteur Vidéo Pro</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d001f;
+      color: #fff;
+      overflow-x: hidden;
+      position: relative;
+      padding: 20px; /* espace pour la bordure led */
+    }
+    /* Bordure LED animée autour de la page */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 10px; bottom: 10px; left: 10px; right: 10px;
+      pointer-events: none;
+      border: 4px solid;
+      border-image-slice: 1;
+      border-width: 4px;
+      border-image-source: linear-gradient(270deg, #ff0055, #8a2be2, #ff0055);
+      animation: ledRotate 5s linear infinite;
+      border-radius: 15px;
+      z-index: 9999;
+    }
+    @keyframes ledRotate {
+      0% {
+        border-image-source: linear-gradient(270deg, #ff0055, #8a2be2, #ff0055);
+      }
+      100% {
+        border-image-source: linear-gradient(630deg, #ff0055, #8a2be2, #ff0055);
+      }
+    }
+
+    header {
+      background: linear-gradient(45deg, #6a00ff, #ff0055);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+    }
+    header h1 {
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    nav a {
+      margin-left: 1.5rem;
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 1rem;
+      position: relative;
+      z-index: 20;
+      background: rgba(13, 0, 31, 0.85);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,0,85,0.5);
+    }
+
+    h2 {
+      color: #ff006a;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      border-left: 6px solid #ff006a;
+      padding-left: 0.5rem;
+    }
+
+    section {
+      margin-bottom: 4rem;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .btn-commande {
+      margin-top: 0.5rem;
+      display: inline-block;
+      background: #ff0055;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .btn-commande:hover {
+      background: #d40049;
+    }
+
+    a.button {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      background: #ff0055;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    a.button:hover {
+      background: #d40049;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+      position: relative;
+      z-index: 20;
+    }
+
+    /* Colonnes LED latérales */
+    .led-column {
+      position: fixed;
+      top: 0;
+      width: 40px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 15;
+      pointer-events: none;
+    }
+    .led-column.left {
+      left: 0;
+    }
+    .led-column.right {
+      right: 0;
+    }
+
+    .led-dot {
+      width: 10px;
+      height: 10px;
+      background: #ff0055;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ff0055, 0 0 15px #8a2be2;
+      animation: upDown 3s ease-in-out infinite;
+      opacity: 0.7;
+    }
+    /* On va décaler les animations par delay */
+    .led-dot:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+    .led-dot:nth-child(3) {
+      animation-delay: 1s;
+    }
+    .led-dot:nth-child(4) {
+      animation-delay: 1.5s;
+    }
+    .led-dot:nth-child(5) {
+      animation-delay: 2s;
+    }
+    .led-dot:nth-child(6) {
+      animation-delay: 2.5s;
+    }
+
+    @keyframes upDown {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(-15px); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<!-- Colonnes LED latérales -->
+<div class="led-column left">
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+</div>
+<div class="led-column right">
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+  <div class="led-dot"></div>
+</div>
+
+<header>
+  <h1>MTGZSPACE</h1>
+  <nav>
+    <a href="#accueil">Accueil</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#contact">Contact</a>
+    <a href="rejoindre.html">Rejoindre l'équipe</a>
+  </nav>
+</header>
+
+<main>
+  <section id="accueil">
+    <h2>Bienvenue !</h2>
+    <p>Je suis <strong>MTGZSPACE</strong>, YouTubeur gaming et monteur vidéo.  
+    Je réalise des montages stylés, dynamiques et adaptés à ton contenu !</p>
+  </section>
+
+  <section id="tarifs">
+    <h2>Mes Tarifs</h2>
+    <ul>
+      <li>🎬 <strong>Montage vidéo complet : 6 €</strong><br>
+        ▶️ YouTube, gaming, vlog, tuto, etc.<br>
+        ▶️ Coupage, transitions, effets, musiques, sous-titres si besoin<br>
+        <a href="https://paypal.me/MTGZSPACE?country.x=FR&locale.x=fr_FR?amount=5" target="_blank" class="btn-commande">Commander</a>
+      </li>
+      <li>📱 <strong>TikTok / Shorts / Reels : 4 €</strong><br>
+        ▶️ Format vertical, punchy, accrocheur<br>
+        ▶️ Optimisé pour capter l’attention<br>
+        <a href="https://paypal.me/MTGZSPACE?country.x=FR&locale.x=fr_FR?amount=2" target="_blank" class="btn-commande">Commander</a>
+      </li>
+      <li>🖼️ <strong>Miniature personnalisée : 2 €</strong><br>
+        ▶️ Design impactant pour booster tes clics<br>
+        <a href="https://paypal.me/MTGZSPACE?country.x=FR&locale.x=fr_FR?amount=1" target="_blank" class="btn-commande">Commander</a>
+      </li>
+    </ul>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>📧 Email : <a href="mailto:edojuniorsantos2012eds@gmail.com">edojuniorsantos2012eds@gmail.com</a><br>
+       💬 Discord : <a href="https://www.youtube.com/"
+    <p><strong>Moyens de paiement acceptés :</strong> Tous types de paiements via PayPal (cartes bancaires, comptes PayPal, etc.)</p>
+
+    <a href="rejoindre.html" class="button">Rejoindre l'équipe</a>
+  </section>
+</main>
+
+<footer>
+  © 2025 MTGZSPACE | Tous droits réservés
+</footer>
+
+<script>
+  // Fond animé : particules rouge-violet
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particles = [];
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.radius = Math.random() * 2 + 1;
+      this.dx = (Math.random() - 0.5) * 0.5;
+      this.dy = (Math.random() - 0.5) * 0.5;
+      this.color = Math.random() > 0.5 ? '#ff0055' : '#8a2be2';
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+
+    update() {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (this.x < 0 || this.x > width) this.dx *= -1;
+      if (this.y < 0 || this.y > height) this.dy *= -1;
+      this.draw();
+    }
+  }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < 100; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(p => p.update());
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', () => {
+    resize();
+    initParticles();
+  });
+
+  resize();
+  initParticles();
+  animate();
+</script>
+
+</body>
+</html>
