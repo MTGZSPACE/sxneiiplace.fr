@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SXNEII - Premium Video Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:'Orbitron',sans-serif;
+background:#050505;
+color:#fff;
+overflow-x:hidden;
+}
+#bg{
+position:fixed;inset:0;z-index:-2;
+background:
+radial-gradient(circle at 20% 20%,rgba(139,92,246,.25),transparent 30%),
+radial-gradient(circle at 80% 30%,rgba(0,229,255,.18),transparent 30%),
+radial-gradient(circle at 50% 80%,rgba(255,0,136,.18),transparent 30%),
+#050505;
+}
+header{
+position:fixed;top:15px;left:50%;transform:translateX(-50%);
+width:90%;padding:18px 30px;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,.1);
+border-radius:20px;
+display:flex;justify-content:space-between;align-items:center;
+z-index:100;
+}
+nav a{color:#fff;text-decoration:none;margin-left:20px}
+.hero{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+}
+.hero h1{
+font-size:clamp(3rem,10vw,8rem);
+background:linear-gradient(90deg,#8b5cf6,#00e5ff,#ff0088);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+.hero p{margin:20px 0;font-size:1.2rem}
+.btn{
+display:inline-block;
+margin:10px;
+padding:14px 28px;
+border-radius:14px;
+text-decoration:none;
+color:white;
+background:linear-gradient(90deg,#8b5cf6,#ff0088);
+box-shadow:0 0 25px rgba(139,92,246,.5);
+}
+section{padding:100px 10%;}
+h2{margin-bottom:30px;font-size:2rem}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+}
+.card{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.1);
+padding:25px;
+border-radius:20px;
+backdrop-filter:blur(10px);
+transition:.3s;
+}
+.card:hover{transform:translateY(-8px)}
+.price{font-size:2rem;margin:15px 0;color:#00e5ff}
+footer{text-align:center;padding:40px;color:#aaa}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<header>
+<div><strong>SXNEII</strong></div>
+<nav>
+<a href="#services">Services</a>
+<a href="#tarifs">Tarifs</a>
+<a href="#portfolio">Portfolio</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+
+<section class="hero">
+<h1>SXNEII</h1>
+<p>Professional Video Editor • YouTube • TikTok • Shorts</p>
+<div>
+<a class="btn" href="#tarifs">Commander</a>
+<a class="btn" href="#portfolio">Portfolio</a>
+</div>
+</section>
+
+<section id="services">
+<h2>Services</h2>
+<div class="grid">
+<div class="card">🎬 Montage YouTube Premium</div>
+<div class="card">📱 TikTok / Shorts / Reels</div>
+<div class="card">🖼️ Thumbnail Design</div>
+<div class="card">🚀 Pack Créateur</div>
+</div>
+</section>
+
+<section id="tarifs">
+<h2>Tarifs</h2>
+<div class="grid">
+<div class="card"><h3>Starter</h3><div class="price">5€</div></div>
+<div class="card"><h3>Pro</h3><div class="price">10€</div></div>
+<div class="card"><h3>Elite</h3><div class="price">20€</div></div>
+</div>
+</section>
+
+<section id="portfolio">
+<h2>Portfolio</h2>
+<div class="card">
+Ajoute ici tes vidéos YouTube, TikTok ou Shorts.
+</div>
+</section>
+
+<section id="contact">
+<h2>Contact</h2>
+<div class="card">
+📧 Ton email<br><br>
+🎮 Ton Discord<br><br>
+▶️ YouTube<br><br>
+📱 TikTok
+</div>
+</section>
+
+<footer>© 2026 SXNEII - All Rights Reserved</footer>
+</body>
+</html>
